@@ -3,7 +3,10 @@ import 'package:app_in/Helper/navigator_helper.dart';
 import 'package:app_in/Helper/sizer_helper.dart';
 import 'package:app_in/Helper/string_helper.dart';
 import 'package:app_in/Views/Auth/country_view.dart';
+import 'package:app_in/Views/Dashboard/home_view.dart';
 import 'package:flutter/material.dart';
+
+import '../../Helper/Server/api_helper.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({Key? key}) : super(key: key);
@@ -13,14 +16,31 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
+
+
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 2), () {
-      Nav.off(context, const CountryView());
-    });
+    getUserData();
     super.initState();
   }
 
+  void getUserData() async{
+   dynamic  userData= await Api.getUserData().then((userData) => {
+   if(userData=="Null"){
+       Future.delayed(const Duration(seconds: 2), () {
+    Nav.off(context, const CountryView());
+    }),
+    }else{
+    Future.delayed(const Duration(seconds: 2), () {
+    Nav.off(context, const HomeView());
+    }),
+
+    }
+
+  });
+
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

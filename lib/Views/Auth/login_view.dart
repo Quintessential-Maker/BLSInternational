@@ -4,6 +4,7 @@ import 'package:app_in/Helper/auth_divider_helper.dart';
 import 'package:app_in/Helper/auth_field_helper.dart';
 import 'package:app_in/Helper/images_helper.dart';
 import 'package:app_in/Helper/sizer_helper.dart';
+import 'package:app_in/Helper/snack_helper.dart';
 import 'package:app_in/Helper/string_helper.dart';
 import 'package:app_in/Views/Auth/register_view.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,6 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   void initState() {
-   
     super.initState();
   }
 
@@ -35,7 +35,7 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 26),
         child: Obx(
           () => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,7 +106,25 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Widget login() {
-    return Appbutton(onTap: () {}, text: Const.login);
+    return Appbutton(
+      onTap: () {
+        if (emailController.text.trim().isEmpty) {
+          Snack.show('Pleas enter the email', Colors.black);
+        } else if (!emailController.text.trim().isEmail) {
+          Snack.show('Pleas enter a valid email', Colors.black);
+        } else if (passwordController.text.trim().isEmpty) {
+          Snack.show('Pleas enter the password', Colors.black);
+        } else if (passwordController.text.trim().length < 6) {
+          Snack.show('Pleas enter a valid password', Colors.black);
+        } else {
+          controller.loginUser(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+          );
+        }
+      },
+      text: Const.login,
+    );
   }
 
   Widget registerText() {
